@@ -62,27 +62,6 @@ const functionsBodies = {
         "    }\n" +
         "    return loaders\n" +
         "}\n",
-    plugins:
-        "const plugins = (template) =>{\n" +
-        "    const base = [\n" +
-        "        new HtmlWebpackPlugin({\n" +
-        "            template: template,\n" +
-        "            minify: {\n" +
-        "                collapseWhitespace: isProd\n" +
-        "            }\n" +
-        "        }),\n" +
-        "        new CleanWebpackPlugin(),\n" +
-        "        new MiniCssExtractPlugin({\n" +
-        "            filename: filename('css'),\n" +
-        "        })\n" +
-        "    ]\n" +
-        "\n" +
-        "    if(isProd){\n" +
-        "        base.push(new BundleAnalyzerPlugin())\n" +
-        "    }\n" +
-        "\n" +
-        "    return base\n" +
-        "}\n",
 };
 
 const template = "const path = require('path')\n" +
@@ -94,35 +73,95 @@ const template = "const path = require('path')\n" +
     "__functions__" +
     "\n" +
     "module.exports = {\n" +
-    "    context:  path.resolve(__dirname,'src'),\n" +
+    "    context:  path.resolve(__dirname,'__context__'),\n" +
     "    mode: 'development',\n" +
     "    entry:{\n" +
-    "        main:  ['@babel/polyfill','./script.js'],\n" +
-    "        analytics: './analytics.ts',\n" +
+    "        main:  ['@babel/polyfill','./__entry_point__'],\n" + // Полифил Убрать, не убрать?
     "    }, \n" +
     "    output:{\n" +
     "        filename: filename('js'),\n" +
-    "        path: path.resolve(__dirname, 'dist')\n" +
+    "        path: path.resolve(__dirname, '__output_folder__')\n" +
     "    },\n" +
     "    resolve:{\n" +
     "        extensions:['.js', '.json'],\n" +
     "        alias:{\n" +
-    "            '@': path.resolve(__dirname,'src')\n" +
+    "            '@': path.resolve(__dirname,'__context__')\n" +
     "        }\n" +
     "    },\n" +
     "    devtool: isDev ? 'source-map': 'eval',\n" +
-    "    plugins: plugins('./index.html'),\n" +
-    "    optimization: optimization(),\n" +
-    "    devServer:{\n" +
-    "        __port__" +
-    "        hot: isDev,\n" +
-    "    },\n" +
+    "    plugins: [\n" +
+    "        _html_webpack_plugin__"+
+    "        new CleanWebpackPlugin(),\n" +
+    "        new MiniCssExtractPlugin({\n" +
+    "            filename: filename('css'),\n" +
+    "        })\n" +
+    "    ],\n" +
+
+    "    __devServer__"
     "    module:{\n" +
-    "        rules:[\n__module_rules__]\n" +
+    "        rules:[\n"
+    "   {\n"+
+    "       test: /\.css$/,\n"+
+    "       use: cssLoaders()\n"+
+    "   },\n"+
+    "   {\n"+
+    "       test: /\.m?js$/,\n"
+    "       exclude: /node_modules/,\n"
+    "       use: jsLoaders()\n"
+    "   },\n"+
+    "   __module_rules__]\n" +
     "    }\n" +
     "}";
 
 const questions = [
+    new ConfigItem.ConfigItem('context',
+        true, '',
+        '',
+        '__context__',
+        '',
+        '__context_param__',
+        (value, replaceWith = 'src') => {
+            return value.replace('__context_param__', replaceWith);
+        }),
+    new ConfigItem.ConfigItem('entryPoints',
+        true, '',
+        '',
+        '__entry_point__',
+        '',
+        '__entry_point_value__',
+        (value, replaceWith = 'script.js') => {
+            return value.replace('__entry_point_value__', replaceWith);
+        }),
+    new ConfigItem.ConfigItem('outputFolder',
+        true, '',
+        '',
+        '__output_folder__',
+        '',
+        '__output_folder_value__',
+        (value, replaceWith = 'dist') => {
+            return value.replace('__output_folder_value__', replaceWith);
+        }),
+    new ConfigItem.ConfigItem('htmlWebpackPlugin',
+        true, 'html-webpack-plugin',
+        'const HtmlWebpackPlugin = require(\'html-webpack-plugin\')',
+        '__html_webpack_plugin__',
+        '',
+        "        new HtmlWebpackPlugin({\n" +
+        "            template: __htmlTemplate__,\n" +
+        "            minify: {\n" +
+        "                collapseWhitespace: isProd\n" +
+        "            }\n" +
+        "        }),\n",
+        null),
+    new ConfigItem.ConfigItem('htmlTemplate',
+        true, '',
+        '',
+        '__htmlTemplate__',
+        '',
+        '__htmlTemplate_value__',
+        (value, replaceWith = 'index.html') => {
+            return value.replace('__htmlTemplate_value__', replaceWith);
+        }),   
     new ConfigItem.ConfigItem('less',
         true, 'less-loader',
         'const MiniCssExtractPlugin = require(\'mini-css-extract-plugin\')',
@@ -131,7 +170,7 @@ const questions = [
         '        {\n' +
         '           test: /\\.less$/,\n' +
         '           use: cssLoaders(\'less-loader\')\n' +
-        '        },',
+        '        },\n',
         null),
     new ConfigItem.ConfigItem('sass',
         true, 'node-sass sass-loader',
@@ -141,17 +180,124 @@ const questions = [
         '{\n' +
         '           test: /\\.s[ac]ss$/,\n' +
         '           use: cssLoaders(\'sass-loader\') \n' +
-        '        },',
+        '        },\n',
+        null),
+    new ConfigItem.ConfigItem('imageExtension',
+        true, '',
+        '',
+        '__module_rules__',
+        '',
+        '        {\n' +
+        '           test: __image_extension__,\n' +
+        '           use:[\'file-loader\']\n' +
+        '        },\n',
+        (value, replaceWith = '/\.(png|jpg|svg|gif)$/') => {
+            return value.replace('__image_extension__', replaceWith);
+        }),
+    new ConfigItem.ConfigItem('fontExtension',
+        true, '',
+        '',
+        '__module_rules__',
+        '',
+        '        {\n' +
+        '           test: __font_extension__,\n' +
+        '           use:[\'file-loader\']\n' +
+        '        },\n',
+        (value, replaceWith = '/\.(ttf|woff|woff2|eot)$/') => {
+            return value.replace('__font_extension__', replaceWith);
+        }),
+    new ConfigItem.ConfigItem('audioExtension',
+        true, '',
+        '',
+        '__module_rules__',
+        '',
+        '        {\n' +
+        '           test: __audio_extension__,\n' +
+        '           use:[\'file-loader\']\n' +
+        '        },\n',
+        (value, replaceWith = '/\.mp3$/') => {
+            return value.replace('__audio_extension__', replaceWith);
+        }),
+    new ConfigItem.ConfigItem('videoExtension',
+        true, '',
+        '',
+        '__module_rules__',
+        '',
+        '        {\n' +
+        '           test: __video_extension__,\n' +
+        '           use:[\'file-loader\']\n' +
+        '        },\n',
+        (value, replaceWith = '/\.mp4$/') => {
+            return value.replace('__video_extension__', replaceWith);
+        }),
+    new ConfigItem.ConfigItem('typescript',
+        true, '@babel/preset-typescript ',
+        '',
+        '__module_rules__',
+        'babelOptions',
+        '{\n'+
+        '    test: /\.ts$/,\n'+
+        '    exclude: /node_modules/,\n'+
+        '    use: {\n'+
+        '      loader: "babel-loader",\n'+
+        '      options: babelOptions(\'@babel/preset-typescript\')\n'+
+        '  }\n'+
+        '},\n',
+        null),
+    new ConfigItem.ConfigItem('react',
+        true, '@babel/preset-react ',
+        '',
+        '__module_rules__',
+        'babelOptions',
+        '{\n'+
+        '    test: /\.ts$/,\n'+
+        '    exclude: /node_modules/,\n'+
+        '    use: {\n'+
+        '      loader: "babel-loader",\n'+
+        '      options: babelOptions(\'@babel/preset-react\')\n'+
+        '  }\n'+
+        '},\n',
+        null),
+    new ConfigItem.ConfigItem('devServer',
+        false, '',
+        '',
+        '__devServer__',
+        '',
+        "    devServer:{\n" +
+        "        port: __port__,\n" +
+        "        __hotModuleReplacement__" +
+        "    },\n",
         null),
     new ConfigItem.ConfigItem('devServerPort',
         false, '',
         '',
         '__port__',
         '',
-        'port: __port_number__,\n',
+        '__port_number__',
         (value, replaceWith = 4000) => {
             return value.replace('__port_number__', replaceWith);
         }),
+    new ConfigItem.ConfigItem('hotModuleReplacement',
+        false, '',
+        '',
+        '__hotModuleReplacement__',
+        '',
+        'hot: isDev,\n',
+        null),
+/*     new ConfigItem.ConfigItem('optimization',
+        false, '',
+        'optimization',
+        '__optimization__',
+        '',
+        "optimization: optimization(),\n",
+        null),
+    new ConfigItem.ConfigItem('libraries',
+        false, '',
+        '',
+        '__optimization__',
+        '',
+        "optimization: optimization(),\n",
+        null), */
 ];
 
 export default function generate(checkedQuestions: Object) {
