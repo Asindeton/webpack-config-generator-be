@@ -90,7 +90,7 @@ const template = "const path = require('path')\n" +
     "    },\n" +
     "    devtool: isDev ? 'source-map': 'eval',\n" +
     "    plugins: [\n" +
-    "        _html_webpack_plugin__"+
+    "        __html_webpack_plugin__"+
     "        new CleanWebpackPlugin(),\n" +
     "        new MiniCssExtractPlugin({\n" +
     "            filename: filename('css'),\n" +
