@@ -118,7 +118,7 @@ const template = "const path = require('path')\n" +
     "        hot: isDev,\n" +
     "    },\n" +
     "    module:{\n" +
-    "        rules:[__module_rules__]\n" +
+    "        rules:[\n__module_rules__]\n" +
     "    }\n" +
     "}";
 
@@ -128,10 +128,10 @@ const questions = [
         'const MiniCssExtractPlugin = require(\'mini-css-extract-plugin\')',
         '__module_rules__',
         'cssLoaders',
-        '{\n' +
-        '   test: /\\.less$/,\n' +
-        '   use: cssLoaders(\'less-loader\')\n' +
-        '},',
+        '        {\n' +
+        '           test: /\\.less$/,\n' +
+        '           use: cssLoaders(\'less-loader\')\n' +
+        '        },',
         null),
     new ConfigItem.ConfigItem('sass',
         true, 'node-sass sass-loader',
@@ -139,9 +139,9 @@ const questions = [
         '__module_rules__',
         'cssLoaders',
         '{\n' +
-        '   test: /\\.s[ac]ss$/,\n' +
-        '   use: cssLoaders(\'sass-loader\') \n' +
-        '},',
+        '           test: /\\.s[ac]ss$/,\n' +
+        '           use: cssLoaders(\'sass-loader\') \n' +
+        '        },',
         null),
     new ConfigItem.ConfigItem('devServerPort',
         false, '',
