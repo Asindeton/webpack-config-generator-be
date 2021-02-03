@@ -51,7 +51,17 @@ const functionsBodies = {
         "    }\n" +
         "    return options\n" +
         "}\n",
-    jsLoaders: "const jsLoaders = () => {\n" +
+};
+
+const template = "const path = require('path')\n" +
+    "__imports__\n" +
+    "const {CleanWebpackPlugin} = require('clean-webpack-plugin')\n"+
+    "\n" +
+    "const isDev = process.env.NODE_ENV === 'development'\n" +
+    "const isProd = process.env.NODE_ENV === 'production'\n" +
+    "const filename = ext => isDev ? `[name].${ext}`:`[name].[hash].${ext}`\n"+
+    "\n" +
+    "const jsLoaders = () => {\n" +
         "    const loaders =[\n" +
         "        {\n" +
         "            loader: \"babel-loader\",\n" +
@@ -63,15 +73,7 @@ const functionsBodies = {
         "        loaders.push('eslint-loader')\n" +
         "    }\n" +
         "    return loaders\n" +
-        "}\n",
-};
-
-const template = "const path = require('path')\n" +
-    "__imports__\n" +
-    "\n" +
-    "const isDev = process.env.NODE_ENV === 'development'\n" +
-    "const isProd = process.env.NODE_ENV === 'production'\n" +
-    "\n" +
+        "}\n"
     "__functions__" +
     "\n" +
     "module.exports = {\n" +
@@ -160,7 +162,7 @@ const questions = [
         '__htmlTemplate__',
         '',
         '__htmlTemplate_value__',
-        (value, replaceWith = 'index.html') => {
+        (value, replaceWith = "'index.html'") => {
             return value.replace('__htmlTemplate_value__', replaceWith);
         }),   
     new ConfigItem.ConfigItem('less',
