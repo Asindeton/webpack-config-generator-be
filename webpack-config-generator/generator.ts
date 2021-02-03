@@ -102,15 +102,15 @@ const template = "const path = require('path')\n" +
     "    optimization:__optimization__"
     "    __devServer__"
     "    module:{\n" +
-    "        rules:[\n"
-    "   {\n"+
-    "       test: /\.css$/,\n"+
-    "       use: cssLoaders()\n"+
-    "   },\n"+
-    "   {\n"+
-    "       test: /\.m?js$/,\n"
-    "       exclude: /node_modules/,\n"
-    "       use: jsLoaders()\n"
+    "        rules:[\n" +
+    "   {\n" +
+    "       test: /\.css$/,\n" +
+    "       use: cssLoaders()\n" +
+    "   },\n" +
+    "   {\n" +
+    "       test: /\.m?js$/,\n" +
+    "       exclude: /node_modules/,\n" +
+    "       use: jsLoaders()\n" +
     "   },\n"+
     "   __module_rules__]\n" +
     "    }\n" +
