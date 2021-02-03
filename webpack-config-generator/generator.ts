@@ -97,10 +97,10 @@ const template = "const path = require('path')\n" +
     "        new MiniCssExtractPlugin({\n" +
     "            filename: filename('css'),\n" +
     "        }),\n" +
-    "        isProdFunc(isProd, __bundle_analyzer__),\n"
+    "        isProdFunc(isProd, __bundle_analyzer__),\n" +
     "    ],\n" +
-    "    optimization:__optimization__"
-    "    __devServer__"
+    "    optimization:__optimization__" +
+    "    __devServer__" +
     "    module:{\n" +
     "        rules:[\n" +
     "   {\n" +
@@ -111,7 +111,7 @@ const template = "const path = require('path')\n" +
     "       test: /\.m?js$/,\n" +
     "       exclude: /node_modules/,\n" +
     "       use: jsLoaders()\n" +
-    "   },\n"+
+    "   },\n" +
     "   __module_rules__]\n" +
     "    }\n" +
     "}";
