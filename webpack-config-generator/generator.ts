@@ -73,7 +73,7 @@ const template = "const path = require('path')\n" +
         "        loaders.push('eslint-loader')\n" +
         "    }\n" +
         "    return loaders\n" +
-        "}\n"
+        "}\n" +
     "__functions__" +
     "\n" +
     "module.exports = {\n" +
