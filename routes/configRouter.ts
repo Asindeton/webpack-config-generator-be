@@ -42,6 +42,7 @@ router.get('/last', async function(req, res) {
     if (!userInDb) {
         return res.status(400).json({message: "User doesn't exist", messageCode: 'incorrectUserData'});
     }
+
     res.status(200).json({ webpackConfig: userInDb.webpackConfig, npmRun: userInDb.npmRun, npmDRun: userInDb.npmDRun });
 });
 
