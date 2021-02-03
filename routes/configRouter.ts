@@ -31,7 +31,7 @@ router.post('/generate', async function(req, res) {
     res.status(200).json({ webpackConfig: webpackConfig.webpackConfig, npmRun: webpackConfig.npmRunCommands, npmDRun: webpackConfig.npmRunDCommands });
 });
 
-router.post('/last', async function(req, res) {
+router.get('/last', async function(req, res) {
     const userId = parseJwt(req, res, true);
     if (!userId) {
         return res.status(401).json({ message: 'No authorization', messageCode: 'noAuthorization' });
