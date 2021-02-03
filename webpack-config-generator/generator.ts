@@ -20,7 +20,7 @@ const functionsBodies = {
     filename:
         "const filename = ext => isDev ? `[name].${ext}`:`[name].[hash].${ext}`\n",
     isProdFunc:
-      "const isProdFunc = (...arg) => arg[0]?arg.slice(1, arg.length).join(', '):'';",
+      "const isProdFunc = (...arg) => arg[0] ? arg.slice(1, arg.length).join(', ') : '';",
     cssLoaders:
         "const cssLoaders = (extra) => {\n" +
         "    const loaders =[{\n" +
