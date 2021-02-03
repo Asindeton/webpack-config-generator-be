@@ -1,26 +1,8 @@
 import * as ConfigItem from '../models/configItem';
 
 const functionsBodies = {
-  optimization:
-      "const optimization = () => {\n" +
-      "    const config = {\n" +
-      "        splitChunks:{\n" +
-      "            chunks: 'all'\n" +
-      "        }\n" +
-      "    }\n" +
-      "    \n" +
-      "    if(isProd){\n" +
-      "        config.minimizer = [\n" +
-      "            new OptimizeCssAssetPlugin(),\n" +
-      "            new TerserWebpackPlugin()\n" +
-      "        ]\n" +
-      "    }\n" +
-      "    return config;\n" +
-      "}\n",
     filename:
         "const filename = ext => isDev ? `[name].${ext}`:`[name].[hash].${ext}`\n",
-    isProdFunc:
-      "const isProdFunc = (...arg) => arg[0] ? arg.slice(1, arg.length).join(', ') : '';",
     cssLoaders:
         "const cssLoaders = (extra) => {\n" +
         "    const loaders =[{\n" +
@@ -61,6 +43,22 @@ const template = "const path = require('path')\n" +
     "const isProd = process.env.NODE_ENV === 'production'\n" +
     "const filename = ext => isDev ? `[name].${ext}`:`[name].[hash].${ext}`\n"+
     "\n" +
+    "const optimization = () => {\n" +
+    "    const config = {\n" +
+    "        splitChunks:{\n" +
+    "            chunks: 'all'\n" +
+    "        }\n" +
+    "    }\n" +
+    "    \n" +
+    "    if(isProd){\n" +
+    "        config.minimizer = [\n" +
+    "            new OptimizeCssAssetPlugin(),\n" +
+    "            new TerserWebpackPlugin()\n" +
+    "        ]\n" +
+    "    }\n" +
+    "    return config;\n" +
+    "}\n"+
+    "\n" +
     "const jsLoaders = () => {\n" +
         "    const loaders =[\n" +
         "        {\n" +
@@ -99,7 +97,6 @@ const template = "const path = require('path')\n" +
     "        new MiniCssExtractPlugin({\n" +
     "            filename: filename('css'),\n" +
     "        }),\n" +
-    "        isProdFunc(isProd, __bundle_analyzer__),\n" +
     "    ],\n" +
     "    optimization:__optimization__" +
     "    __devServer__" +
@@ -152,7 +149,7 @@ const questions = [
         '__html_webpack_plugin__',
         '',
         "        new HtmlWebpackPlugin({\n" +
-        "            template: __htmlTemplate__,\n" +
+        "            __htmlTemplate__',\n" +
         "            __minificationHTML__"+
         "        }),\n",
         null),
@@ -161,8 +158,8 @@ const questions = [
         '',
         '__htmlTemplate__',
         '',
-        '__htmlTemplate_value__',
-        (value, replaceWith = "'index.html'") => {
+        "template: '__htmlTemplate_value__',\n",
+        (value, replaceWith = "index.html") => {
             return value.replace('__htmlTemplate_value__', replaceWith);
         }),   
     new ConfigItem.ConfigItem('less',
@@ -309,9 +306,10 @@ const questions = [
         false, '',
         '',
         '__optimization_tools__',
-        'isProdFunc',
+        '',
         "        minimizer:[\n" +
-        "           isProdFunc(isProd, __minificationCSS__, __minificationJS__),\n" +
+        "           __minificationCSS__,\n"+
+        "           __minificationJS__,\n" +
         "        ],\n",
         null),
     new ConfigItem.ConfigItem('minificationCSS',
@@ -344,8 +342,8 @@ const questions = [
         '',
         "    devtool: isDev ? 'source-map': 'eval',\n",
         null),
-    new ConfigItem.ConfigItem('bundleAnalysis',
-        false, '',
+    new ConfigItem.ConfigItem('bundleAnalyzer',
+        true, 'webpack-bundle-analyzer',
         'const {BundleAnalyzerPlugin} = require(\'webpack-bundle-analyzer\')',
         '__bundle_analyzer__',
         'isProduction',
