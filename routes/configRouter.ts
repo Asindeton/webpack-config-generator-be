@@ -42,6 +42,9 @@ router.get('/last', async function(req, res) {
     if (!userInDb) {
         return res.status(400).json({message: "User doesn't exist", messageCode: 'incorrectUserData'});
     }
+    if (!userInDb.webpackConfig) {
+        return res.status(400).json({message: "Webpack config hasn't been generated yet", messageCode: 'webpackConfigNotExist'});
+    }
 
     res.status(200).json({ webpackConfig: userInDb.webpackConfig, npmRun: userInDb.npmRun, npmDRun: userInDb.npmDRun });
 });
