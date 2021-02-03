@@ -99,8 +99,8 @@ const template = "const path = require('path')\n" +
     "        }),\n" +
     "        isProdFunk(isProd, __bundle_analyzer__),.\n" +
     "    ],\n" +
-    "    optimization:__optimization__" +
-    "    __devServer__" +
+    "    optimization:__optimization__"
+    "    __devServer__"
     "    module:{\n" +
     "        rules:[\n" +
     "   {\n" +
@@ -111,7 +111,7 @@ const template = "const path = require('path')\n" +
     "       test: /\.m?js$/,\n" +
     "       exclude: /node_modules/,\n" +
     "       use: jsLoaders()\n" +
-    "   },\n" +
+    "   },\n"+
     "   __module_rules__]\n" +
     "    }\n" +
     "}";
@@ -264,7 +264,7 @@ const questions = [
         '',
         '__devServer__',
         '',
-        "    devServer:{\n" +
+        "   devServer:{\n" +
         "        port: __port__,\n" +
         "        __hotModuleReplacement__" +
         "    },\n",
@@ -287,10 +287,12 @@ const questions = [
         null),
     new ConfigItem.ConfigItem('optimization',
         false, '',
-        'optimization',
+        '',
         '__optimization__',
         '',
-        '__optimization_tools__',
+        '      {\n'+ 
+            '__optimization_tools__'+
+        '      }\n',
         null),
     new ConfigItem.ConfigItem('libraries',
         false, '',
@@ -299,7 +301,7 @@ const questions = [
         '',
         "        splitChunks:{\n" +
         "            chunks: 'all'\n" +
-        "        }\n",
+        "        },\n",
         null),
     new ConfigItem.ConfigItem('minification',
         false, '',
@@ -322,7 +324,7 @@ const questions = [
         'const TerserWebpackPlugin = require(\'terser-webpack-plugin\')',
         '__minificationJS__',
         '',
-        "            new TerserWebpackPlugin(),\n",
+        "new TerserWebpackPlugin()",
         null),
     new ConfigItem.ConfigItem('minificationHTML',
         false, '',
@@ -344,8 +346,8 @@ const questions = [
         false, '',
         'const {BundleAnalyzerPlugin} = require(\'webpack-bundle-analyzer\')',
         '__bundle_analyzer__',
-        '',
-        "   new BundleAnalyzerPlugin(),\n",
+        'isProduction',
+        "new BundleAnalyzerPlugin()",
         null),
 ];
 
@@ -371,7 +373,7 @@ export default function generate(checkedQuestions: Object) {
     const imports = [];
     const functions = [];
     const npmRunCommands = ['npm install'];
-    const npmRunDCommands = ['npm install -D'];
+    const npmRunDCommands = ['npm install -D webpack webpack-cli cross-env html-webpack-plugin babel-loader @babel/core @babel/preset-env'];
 
     for (const checkedItemsKey in checkedItems) {
         const arrayValue = checkedItems[checkedItemsKey];
