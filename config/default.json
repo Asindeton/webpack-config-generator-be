@@ -1,0 +1,4 @@
+{
+  "jwtSecret": "webpack generator secret",
+  "mongoUri": "mongodb+srv://dev-mongo-db:mongo-12-db@cluster0.psk17.mongodb.net/webpack-mongo-db?retryWrites=true&w=majority"
+}

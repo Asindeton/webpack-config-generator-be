@@ -4,11 +4,11 @@ import { check, validationResult } from 'express-validator';
 import * as jwt from 'jsonwebtoken';
 import User from '../models/user';
 import mongo from '../storage/mongo';
+import * as config from "config";
 
 const router = Router();
 
 const saltRounds = 10;
-const jwtSecret = 'webpack generator secret';
 
 router.post(
     '/register',
@@ -33,7 +33,7 @@ router.post(
         const user = new User({ email, password: passwordHash, name });
         await user.save();
 
-        const token = jwt.sign({ userId: user.id }, jwtSecret, { expiresIn: '24h' });
+        const token = jwt.sign({ userId: user.id }, config.get('jwtSecret'), { expiresIn: '24h' });
         res.status(201).json({ message: 'User was created', token, userId: user.id, name: user.name });
       }
       catch (e) {
@@ -63,7 +63,7 @@ router.post(
             if (!isMatch) {
                 return res.status(400).json({message: "Incorrect input user data", messageCode: 'incorrectUserData'});
             }
-            const token = jwt.sign({ userId: userInDb.id }, jwtSecret, { expiresIn: '24h' });
+            const token = jwt.sign({ userId: userInDb.id }, config.get('jwtSecret'), { expiresIn: '24h' });
             res.status(200).json({ token, userId: userInDb.id, name: userInDb.name });
         }
         catch (e) {
