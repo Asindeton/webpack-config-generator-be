@@ -292,7 +292,7 @@ const questions = [
         '',
         '      {\n'+ 
             '__optimization_tools__'+
-        '      }\n',
+        '      },\n',
         null),
     new ConfigItem.ConfigItem('libraries',
         false, '',
@@ -317,7 +317,7 @@ const questions = [
         'const OptimizeCssAssetPlugin = require(\'optimize-css-assets-webpack-plugin\')',
         '__minificationCSS__',
         '',
-        "new OptimizeCssAssetPlugin(),",
+        "new OptimizeCssAssetPlugin()",
         null),
     new ConfigItem.ConfigItem('minificationJS',
         true, 'terser-webpack-plugin',
