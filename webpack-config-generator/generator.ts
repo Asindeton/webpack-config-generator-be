@@ -103,11 +103,11 @@ const template = "const path = require('path')\n" +
     "    module:{\n" +
     "        rules:[\n" +
     "   {\n" +
-    "       test: /\.css$/,\n" +
+    "       test: /\\.css$/,\n" +
     "       use: cssLoaders()\n" +
     "   },\n" +
     "   {\n" +
-    "       test: /\.m?js$/,\n" +
+    "       test: /\\.m?js$/,\n" +
     "       exclude: /node_modules/,\n" +
     "       use: jsLoaders()\n" +
     "   },\n" +
@@ -149,7 +149,7 @@ const questions = [
         '__html_webpack_plugin__',
         '',
         "        new HtmlWebpackPlugin({\n" +
-        "            __htmlTemplate__',\n" +
+        "            __htmlTemplate__,\n" +
         "            __minificationHTML__"+
         "        }),\n",
         null),
@@ -158,7 +158,7 @@ const questions = [
         '',
         '__htmlTemplate__',
         '',
-        "template: '__htmlTemplate_value__',\n",
+        "template: '__htmlTemplate_value__'\n",
         (value, replaceWith = "index.html") => {
             return value.replace('__htmlTemplate_value__', replaceWith);
         }),   
@@ -191,7 +191,7 @@ const questions = [
         '           test: __image_extension__,\n' +
         '           use:[\'file-loader\']\n' +
         '        },\n',
-        (value, replaceWith = '/\.(png|jpg|svg|gif)$/') => {
+        (value, replaceWith = '/\\.(png|jpg|svg|gif)$/') => {
             return value.replace('__image_extension__', replaceWith);
         }),
     new ConfigItem.ConfigItem('fontExtension',
@@ -203,7 +203,7 @@ const questions = [
         '           test: __font_extension__,\n' +
         '           use:[\'file-loader\']\n' +
         '        },\n',
-        (value, replaceWith = '/\.(ttf|woff|woff2|eot)$/') => {
+        (value, replaceWith = '/\\.(ttf|woff|woff2|eot)$/') => {
             return value.replace('__font_extension__', replaceWith);
         }),
     new ConfigItem.ConfigItem('audioExtension',
@@ -215,7 +215,7 @@ const questions = [
         '           test: __audio_extension__,\n' +
         '           use:[\'file-loader\']\n' +
         '        },\n',
-        (value, replaceWith = '/\.mp3$/') => {
+        (value, replaceWith = '/\\.mp3$/') => {
             return value.replace('__audio_extension__', replaceWith);
         }),
     new ConfigItem.ConfigItem('videoExtension',
@@ -227,7 +227,7 @@ const questions = [
         '           test: __video_extension__,\n' +
         '           use:[\'file-loader\']\n' +
         '        },\n',
-        (value, replaceWith = '/\.mp4$/') => {
+        (value, replaceWith = '/\\.mp4$/') => {
             return value.replace('__video_extension__', replaceWith);
         }),
     new ConfigItem.ConfigItem('typescript',
@@ -236,7 +236,7 @@ const questions = [
         '__module_rules__',
         'babelOptions',
         '{\n'+
-        '    test: /\.ts$/,\n'+
+        '    test: /\\.ts$/,\n'+
         '    exclude: /node_modules/,\n'+
         '    use: {\n'+
         '      loader: "babel-loader",\n'+
@@ -250,7 +250,7 @@ const questions = [
         '__module_rules__',
         'babelOptions',
         '{\n'+
-        '    test: /\.ts$/,\n'+
+        '    test: /\\.ts$/,\n'+
         '    exclude: /node_modules/,\n'+
         '    use: {\n'+
         '      loader: "babel-loader",\n'+
