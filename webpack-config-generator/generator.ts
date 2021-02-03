@@ -19,8 +19,8 @@ const functionsBodies = {
       "}\n",
     filename:
         "const filename = ext => isDev ? `[name].${ext}`:`[name].[hash].${ext}`\n",
-    isProduction:
-      "const isProdFunk = (...arg) => arg[0]?arg.slice(1, arg.length).join(', '):'';",
+    isProdFunc:
+      "const isProdFunc = (...arg) => arg[0]?arg.slice(1, arg.length).join(', '):'';",
     cssLoaders:
         "const cssLoaders = (extra) => {\n" +
         "    const loaders =[{\n" +
@@ -97,7 +97,7 @@ const template = "const path = require('path')\n" +
     "        new MiniCssExtractPlugin({\n" +
     "            filename: filename('css'),\n" +
     "        }),\n" +
-    "        isProdFunk(isProd, __bundle_analyzer__),.\n"
+    "        isProdFunc(isProd, __bundle_analyzer__),\n"
     "    ],\n" +
     "    optimization:__optimization__"
     "    __devServer__"
@@ -307,17 +307,17 @@ const questions = [
         false, '',
         '',
         '__optimization_tools__',
-        '',
+        'isProdFunc',
         "        minimizer:[\n" +
-        "           isProdFunc(isProd,  __minificationCSS__, __minificationJS__)\n" +
-        "        ])\n",
+        "           isProdFunc(isProd, __minificationCSS__, __minificationJS__),\n" +
+        "        ],\n",
         null),
     new ConfigItem.ConfigItem('minificationCSS',
         true, 'optimize-css-assets-webpack-plugin',
         'const OptimizeCssAssetPlugin = require(\'optimize-css-assets-webpack-plugin\')',
         '__minificationCSS__',
         '',
-        "            new OptimizeCssAssetPlugin(),\n",
+        "new OptimizeCssAssetPlugin(),",
         null),
     new ConfigItem.ConfigItem('minificationJS',
         true, 'terser-webpack-plugin',
