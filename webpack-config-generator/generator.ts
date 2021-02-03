@@ -19,6 +19,8 @@ const functionsBodies = {
       "}\n",
     filename:
         "const filename = ext => isDev ? `[name].${ext}`:`[name].[hash].${ext}`\n",
+    isProduction:
+      "const isProdFunk = (...arg) => arg[0]?arg.slice(1, arg.length).join(', '):'';",
     cssLoaders:
         "const cssLoaders = (extra) => {\n" +
         "    const loaders =[{\n" +
@@ -88,15 +90,16 @@ const template = "const path = require('path')\n" +
     "            '@': path.resolve(__dirname,'__context__')\n" +
     "        }\n" +
     "    },\n" +
-    "    devtool: isDev ? 'source-map': 'eval',\n" +
+    "    __source_map__"
     "    plugins: [\n" +
-    "        _html_webpack_plugin__"+
+    "        __html_webpack_plugin__"+
     "        new CleanWebpackPlugin(),\n" +
     "        new MiniCssExtractPlugin({\n" +
     "            filename: filename('css'),\n" +
-    "        })\n" +
+    "        }),\n" +
+    "        isProdFunk(isProd, __bundle_analyzer__),.\n"
     "    ],\n" +
-
+    "    optimization:__optimization__"
     "    __devServer__"
     "    module:{\n" +
     "        rules:[\n"
@@ -115,7 +118,7 @@ const template = "const path = require('path')\n" +
 
 const questions = [
     new ConfigItem.ConfigItem('context',
-        true, '',
+        false, '',
         '',
         '__context__',
         '',
@@ -124,7 +127,7 @@ const questions = [
             return value.replace('__context_param__', replaceWith);
         }),
     new ConfigItem.ConfigItem('entryPoints',
-        true, '',
+        false, '',
         '',
         '__entry_point__',
         '',
@@ -133,7 +136,7 @@ const questions = [
             return value.replace('__entry_point_value__', replaceWith);
         }),
     new ConfigItem.ConfigItem('outputFolder',
-        true, '',
+        false, '',
         '',
         '__output_folder__',
         '',
@@ -148,13 +151,11 @@ const questions = [
         '',
         "        new HtmlWebpackPlugin({\n" +
         "            template: __htmlTemplate__,\n" +
-        "            minify: {\n" +
-        "                collapseWhitespace: isProd\n" +
-        "            }\n" +
+        "            __minificationHTML__"+
         "        }),\n",
         null),
     new ConfigItem.ConfigItem('htmlTemplate',
-        true, '',
+        false, '',
         '',
         '__htmlTemplate__',
         '',
@@ -183,7 +184,7 @@ const questions = [
         '        },\n',
         null),
     new ConfigItem.ConfigItem('imageExtension',
-        true, '',
+        true, 'file-loader',
         '',
         '__module_rules__',
         '',
@@ -195,7 +196,7 @@ const questions = [
             return value.replace('__image_extension__', replaceWith);
         }),
     new ConfigItem.ConfigItem('fontExtension',
-        true, '',
+        true, 'file-loader',
         '',
         '__module_rules__',
         '',
@@ -207,7 +208,7 @@ const questions = [
             return value.replace('__font_extension__', replaceWith);
         }),
     new ConfigItem.ConfigItem('audioExtension',
-        true, '',
+        true, 'file-loader',
         '',
         '__module_rules__',
         '',
@@ -219,7 +220,7 @@ const questions = [
             return value.replace('__audio_extension__', replaceWith);
         }),
     new ConfigItem.ConfigItem('videoExtension',
-        true, '',
+        true, 'file-loader',
         '',
         '__module_rules__',
         '',
@@ -259,7 +260,7 @@ const questions = [
         '},\n',
         null),
     new ConfigItem.ConfigItem('devServer',
-        false, '',
+        true, 'webpack-dev-server @webpack-cli/init',
         '',
         '__devServer__',
         '',
@@ -284,20 +285,68 @@ const questions = [
         '',
         'hot: isDev,\n',
         null),
-/*     new ConfigItem.ConfigItem('optimization',
+    new ConfigItem.ConfigItem('optimization',
         false, '',
         'optimization',
         '__optimization__',
         '',
-        "optimization: optimization(),\n",
+        '__optimization_tools__',
         null),
     new ConfigItem.ConfigItem('libraries',
         false, '',
         '',
-        '__optimization__',
+        '__optimization_tools__',
         '',
-        "optimization: optimization(),\n",
-        null), */
+        "        splitChunks:{\n" +
+        "            chunks: 'all'\n" +
+        "        }\n",
+        null),
+    new ConfigItem.ConfigItem('minification',
+        false, '',
+        '',
+        '__optimization_tools__',
+        '',
+        "        minimizer:[\n" +
+        "           isProdFunc(isProd,  __minificationCSS__, __minificationJS__)\n" +
+        "        ])\n",
+        null),
+    new ConfigItem.ConfigItem('minificationCSS',
+        true, 'optimize-css-assets-webpack-plugin',
+        'const OptimizeCssAssetPlugin = require(\'optimize-css-assets-webpack-plugin\')',
+        '__minificationCSS__',
+        '',
+        "            new OptimizeCssAssetPlugin(),\n",
+        null),
+    new ConfigItem.ConfigItem('minificationJS',
+        true, 'terser-webpack-plugin',
+        'const TerserWebpackPlugin = require(\'terser-webpack-plugin\')',
+        '__minificationJS__',
+        '',
+        "            new TerserWebpackPlugin(),\n",
+        null),
+    new ConfigItem.ConfigItem('minificationHTML',
+        false, '',
+        '',
+        '__minificationHTML__',
+        '',
+        "            minify: {\n" +
+        "                collapseWhitespace: isProd\n" +
+        "            }\n",
+        null),
+    new ConfigItem.ConfigItem('sourceMap',
+        false, '',
+        '',
+        '__source_map__',
+        '',
+        "    devtool: isDev ? 'source-map': 'eval',\n",
+        null),
+    new ConfigItem.ConfigItem('bundleAnalysis',
+        false, '',
+        'const {BundleAnalyzerPlugin} = require(\'webpack-bundle-analyzer\')',
+        '__bundle_analyzer__',
+        '',
+        "   new BundleAnalyzerPlugin(),\n",
+        null),
 ];
 
 export default function generate(checkedQuestions: Object) {
