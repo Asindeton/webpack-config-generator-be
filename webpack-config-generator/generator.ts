@@ -90,18 +90,17 @@ const template = "const path = require('path')\n" +
     "            '@': path.resolve(__dirname,'__context__')\n" +
     "        }\n" +
     "    },\n" +
-    "    __source_map__"
+    "    __source_map__" +
     "    plugins: [\n" +
     "        __html_webpack_plugin__"+
     "        new CleanWebpackPlugin(),\n" +
     "        new MiniCssExtractPlugin({\n" +
     "            filename: filename('css'),\n" +
     "        }),\n" +
-    "        isProdFunk(isProd, __bundle_analyzer__),.\n"
+    "        isProdFunk(isProd, __bundle_analyzer__),.\n" +
     "    ],\n" +
-    "    optimization:__optimization__"
-    "    __devServer__"
-
+    "    optimization:__optimization__" +
+    "    __devServer__" +
     "    module:{\n" +
     "        rules:[\n" +
     "   {\n" +
