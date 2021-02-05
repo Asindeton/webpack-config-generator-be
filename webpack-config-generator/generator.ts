@@ -43,22 +43,6 @@ const template = "const path = require('path')\n" +
     "const isProd = process.env.NODE_ENV === 'production'\n" +
     "const filename = ext => isDev ? `[name].${ext}`:`[name].[hash].${ext}`\n"+
     "\n" +
-    "const optimization = () => {\n" +
-    "    const config = {\n" +
-    "        splitChunks:{\n" +
-    "            chunks: 'all'\n" +
-    "        }\n" +
-    "    }\n" +
-    "    \n" +
-    "    if(isProd){\n" +
-    "        config.minimizer = [\n" +
-    "            new OptimizeCssAssetPlugin(),\n" +
-    "            new TerserWebpackPlugin()\n" +
-    "        ]\n" +
-    "    }\n" +
-    "    return config;\n" +
-    "}\n"+
-    "\n" +
     "const jsLoaders = () => {\n" +
         "    const loaders =[\n" +
         "        {\n" +
@@ -373,7 +357,7 @@ export default function generate(checkedQuestions: Object) {
     const imports = [];
     const functions = [];
     const npmRunCommands = ['npm install'];
-    const npmRunDCommands = ['npm install -D webpack webpack-cli cross-env html-webpack-plugin babel-loader @babel/core @babel/preset-env'];
+    const npmRunDCommands = ['npm install -D webpack webpack-cli cross-env html-webpack-plugin babel-loader @babel/core @babel/polyfill @babel/preset-env css-loader clean-webpack-plugin mini-css-extract-plugin eslint eslint-loader'];
 
     for (const checkedItemsKey in checkedItems) {
         const arrayValue = checkedItems[checkedItemsKey];
