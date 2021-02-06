@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/auth', authRouter);
-app.use('/api/config', configRouter)
+app.use('/api/config', configRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

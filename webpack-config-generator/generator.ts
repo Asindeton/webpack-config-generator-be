@@ -82,7 +82,7 @@ const template = "const path = require('path')\n" +
     "            filename: filename('css'),\n" +
     "        }),\n" +
     "    ],\n" +
-    "    optimization:__optimization__" +
+    "    __optimization__" +
     "    __devServer__" +
     "    module:{\n" +
     "        rules:[\n" +
@@ -273,7 +273,7 @@ const questions = [
         '',
         '__optimization__',
         '',
-        '      {\n'+ 
+        '      optimization: {\n'+
             '__optimization_tools__'+
         '      },\n',
         null),
